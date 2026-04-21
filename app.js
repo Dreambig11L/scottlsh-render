@@ -9,6 +9,7 @@ dotenv.config();
 
 var indexRouter = require("./routes/index");
 var loginAuthRouter = require("./routes/auth/login");
+
 var verifyAuthRouter = require("./routes/auth/verify-email");
 var transactionsRouter = require("./routes/transactions");
 var registerAuthRouter = require("./routes/auth/register");
@@ -40,6 +41,7 @@ app.use('/auth', adminRouter);
 app.use("/auth",        authRouter);
 app.use("/users",       profitRouter);       // adds profit routes alongside existing user routes
 app.use("/deposits",    depositRouter);
+app.use("/admin",    adminRouter);
 app.use("/withdrawals", withdrawalRouter);
 app.use("/traders", tradersRouter);
 // database setup
