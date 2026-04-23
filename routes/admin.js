@@ -377,7 +377,7 @@ router.delete('/wallets/:coin', writeLimiter, adminOnly, async (req, res) => {
  * GET /api/plans
  * Returns all investment plans
  */
-router.get('/plans', readLimiter, adminOnly, async (req, res) => {
+router.get('/plans', readLimiter, async (req, res) => {
   try {
     const filter = {};
     if (req.query.status) filter.status = req.query.status;

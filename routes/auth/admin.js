@@ -376,7 +376,7 @@ router.delete('/wallets/:coin', writeLimiter, adminOnly, async (req, res) => {
  * GET /api/plans
  * Returns all investment plans
  */
-router.get('/plans', readLimiter, adminOnly, async (req, res) => {
+router.get('/plans', readLimiter, async (req, res) => {
   try {
     const filter = {};
     if (req.query.status) filter.status = req.query.status;
@@ -407,7 +407,7 @@ router.get('/plans/:id', readLimiter, adminOnly, async (req, res) => {
  * POST /api/plans
  * Create a new investment plan
  */
-router.post('/plans', writeLimiter, adminOnly, async (req, res) => {
+router.post('/plans', writeLimiter, async (req, res) => {
   try {
     const { name, roi, minDeposit, maxDeposit, duration, payout, refBonus, description, status } = req.body;
     if (!name || roi == null || !minDeposit || !maxDeposit || !duration) {
