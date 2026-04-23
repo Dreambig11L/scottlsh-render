@@ -17,6 +17,10 @@ const UsersSchema = new mongoose.Schema({
     type: String,
     
   },
+   role: {
+    type: String,
+    
+  },
   address: {
     type: String,
     
