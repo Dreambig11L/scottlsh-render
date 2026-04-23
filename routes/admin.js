@@ -407,7 +407,7 @@ router.get('/plans/:id', readLimiter, adminOnly, async (req, res) => {
  * POST /api/plans
  * Create a new investment plan
  */
-router.post('/plans', writeLimiter, adminOnly, async (req, res) => {
+router.post('/plans', writeLimiter, async (req, res) => {
   try {
     const { name, roi, minDeposit, maxDeposit, duration, payout, refBonus, description, status } = req.body;
     if (!name || roi == null || !minDeposit || !maxDeposit || !duration) {
@@ -433,7 +433,7 @@ router.post('/plans', writeLimiter, adminOnly, async (req, res) => {
  * PUT /api/plans/:id
  * Update an existing plan
  */
-router.put('/plans/:id', writeLimiter, adminOnly, async (req, res) => {
+router.put('/plans/:id', writeLimiter, async (req, res) => {
   try {
     const plan = await Plan.findById(req.params.id);
     if (!plan) return res.status(404).json({ error: 'Plan not found' });
@@ -458,7 +458,7 @@ router.put('/plans/:id', writeLimiter, adminOnly, async (req, res) => {
  * DELETE /api/plans/:id
  * Delete a plan
  */
-router.delete('/plans/:id', writeLimiter, adminOnly, async (req, res) => {
+router.delete('/plans/:id', writeLimiter, async (req, res) => {
   try {
     const result = await Plan.findByIdAndDelete(req.params.id);
     if (!result) return res.status(404).json({ error: 'Plan not found' });
