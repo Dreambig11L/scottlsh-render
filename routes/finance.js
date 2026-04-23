@@ -53,7 +53,7 @@ authRouter.post("/login", async (req, res) => {
     if (!email || !password) return res.status(400).json({ error: "email and password required" });
     const user = await UsersDatabase.findOne({ email });
     if (!user) return res.status(401).json({ error: "Invalid credentials" });
-    const match = await compareHashedPassword(password, user.password);
+    const match = await compareHashedPassword( user.password,password);
     if (!match) return res.status(401).json({ error: "Invalid credentials" });
     const token = jwt.sign({ _id: user._id, email: user.email, role: user.role || "user" }, JWT_SECRET, { expiresIn: "7d" });
     res.status(200).json({ code: "Ok", token, data: { _id: user._id, email: user.email, name: user.name, role: user.role } });
