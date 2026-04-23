@@ -42,7 +42,7 @@ const Withdrawal = mongoose.model("Withdrawal", WithdrawalSchema);
 // ─────────────────────────────────────────────
 const authRouter = express.Router();
 const UsersDatabase = require("../models/User");
-const { hashPassword, comparePassword } = require("../.../utils");
+const { hashPassword, comparePassword } = require("../../utils");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET || "change_me_in_production";
 
