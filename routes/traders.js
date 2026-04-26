@@ -8,14 +8,20 @@ const mongoose = require("mongoose");
 
 // Trader profile (global, managed by admin)
 const TraderSchema = new mongoose.Schema({
-  name:     { type: String, required: true },
-  photo:    { type: String, default: "" },        // image URL
-  signal:   { type: Number, default: 0 },         // followers count
-  drawdown: { type: Number, default: 0 },         // total trades
-  profit:   { type: String, default: "0%" },      // profit rate display string
-  status:   { type: String, enum: ["online","offline"], default: "online" },
-  bio:      { type: String, default: "" },
-  createdAt:{ type: Date, default: Date.now },
+  name:       { type: String, required: true },
+  photo:      { type: String, default: "" },        // image URL
+  signal:     { type: Number, default: 0 },         // followers count
+  drawdown:   { type: Number, default: 0 },         // total trades
+  profit:     { type: String, default: "0%" },      // profit rate display string
+  status:     { type: String, enum: ["online","offline"], default: "online" },
+  bio:        { type: String, default: "" },
+  risk:       { type: String, default: "" },        // e.g. Low / Medium / High
+  frequency:  { type: String, default: "" },        // e.g. country or trading frequency
+  strategy:   { type: Number, default: 0 },         // confidence % e.g. 92
+  minLimit:   { type: Number, default: 0 },         // minimum investment limit
+  maxLimit:   { type: Number, default: 0 },         // maximum investment limit
+  interest:   { type: Number, default: 0 },         // ROI / interest %
+  createdAt:  { type: Date, default: Date.now },
 });
 const Trader = mongoose.model("Trader", TraderSchema);
 
@@ -66,9 +72,9 @@ router.get("/:id", async (req, res) => {
 // POST create trader
 router.post("/", async (req, res) => {
   try {
-    const { name, photo, signal, drawdown, profit, status, bio } = req.body;
+    const { name, photo, signal, drawdown, profit, status, bio, risk, frequency, strategy, minLimit, maxLimit, interest } = req.body;
     if (!name) return res.status(400).json({ error: "name is required" });
-    const trader = new Trader({ name, photo, signal, drawdown, profit, status, bio });
+    const trader = new Trader({ name, photo, signal, drawdown, profit, status, bio, risk, frequency, strategy, minLimit, maxLimit, interest });
     await trader.save();
     res.status(201).json({ code: "Ok", message: "Trader created", data: trader });
   } catch (e) { res.status(500).json({ error: e.message }); }

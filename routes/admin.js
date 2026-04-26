@@ -236,24 +236,31 @@ router.get('/wallets', readLimiter, async (req, res) => {
  */
 router.post('/wallets', writeLimiter, async (req, res) => {
   try {
-    const { coin, address, network } = req.body;
-    if (!coin || !address) {
-      return res.status(400).json({ error: 'coin and address are required' });
+    const wallets = Array.isArray(req.body) ? req.body : [req.body];
+
+    for (const w of wallets) {
+      if (!w.coin || !w.address) {
+        return res.status(400).json({ error: 'coin and address are required' });
+      }
+
+      const existing = await Wallet.findOne({ coin: w.coin });
+      if (existing) {
+        return res.status(409).json({
+          error: `Wallet for ${w.coin} already exists`
+        });
+      }
+
+      const wallet = new Wallet({
+        coin: w.coin,
+        address: w.address,
+        network: w.network || ''
+      });
+
+      await wallet.save();
     }
-    const existing = await Wallet.findOne({ coin });
-    if (existing) {
-      return res.status(409).json({ error: 'A wallet for this coin already exists. Use PUT to update.' });
-    }
-    const wallet = new Wallet({ coin, address, network: network || '' });
-    await wallet.save();
 
-    await logAudit({ action: 'WALLET_CREATE', entity: 'wallet', entityId: coin,
-      oldValue: null, newValue: { coin, address, network }, req });
+    res.status(201).json({ code: 'Ok', message: 'Wallet(s) added' });
 
-    await sendWalletAlert({ action: 'CREATED', coin, oldAddress: null,
-      newAddress: address, changedBy: req.user.id, ip: req.ip });
-
-    res.status(201).json({ code: 'Ok', message: 'Wallet added', data: wallet });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
