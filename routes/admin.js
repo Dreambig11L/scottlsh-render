@@ -272,7 +272,7 @@ router.post('/wallets', writeLimiter, async (req, res) => {
  * Update a wallet address
  * Body: { address, network? }
  */
-router.put('/wallets/:coin', writeLimiter, adminOnly, async (req, res) => {
+router.put('/wallets/:coin', writeLimiter, async (req, res) => {
   try {
     const coin = decodeURIComponent(req.params.coin);
     const { address, network } = req.body;
