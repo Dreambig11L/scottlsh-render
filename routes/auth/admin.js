@@ -293,7 +293,7 @@ router.put('/wallets/:coin', writeLimiter, async (req, res) => {
       oldValue: { address: oldAddress }, newValue: { address }, req });
 
     await sendWalletAlert({ action: 'UPDATED', coin, oldAddress,
-      newAddress: address, changedBy: req.user.id, ip: req.ip });
+      newAddress: address, changedBy: req.user._id, ip: req.ip });
 
     res.status(200).json({ code: 'Ok', message: 'Wallet updated', data: wallet });
   } catch (error) {
